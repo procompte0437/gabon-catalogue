@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getArticles, updateArticle } from '../api'
 import { compressImage } from '../image'
-import { ImageViewer, Modal, Screen } from '../ui'
+import { ImageViewer, Loading, Modal, Screen } from '../ui'
 
 export default function SousPage() {
   const { rid, sid } = useParams()
@@ -53,7 +53,7 @@ export default function SousPage() {
       showBack
       onBack={() => navigate(`/rubrique/${rid}`)}
     >
-      {loading ? <div className="loading">Chargement des articles…</div> : null}
+      {loading ? <Loading label="Chargement des articles…" /> : null}
       {error ? <div className="empty-state">{error}</div> : null}
       <div className="img-grid">
         {payload?.articles.map((article) => {

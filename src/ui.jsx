@@ -1,6 +1,70 @@
 import { useEffect, useState } from 'react'
 import { useCatalogue } from './catalogue'
 
+const LOADER_RADIUS = 28
+const LOADER_CIRCUMFERENCE = 2 * Math.PI * LOADER_RADIUS
+
+function useLoadProgress() {
+  const [progress, setProgress] = useState(0)
+
+  useEffect(() => {
+    const started = performance.now()
+    let frame = 0
+    let shown = -1
+
+    const tick = (now) => {
+      const elapsed = now - started
+      const next = Math.min(99, Math.round(99 * (1 - Math.exp(-elapsed / 1700))))
+      if (next !== shown) {
+        shown = next
+        setProgress(next)
+      }
+      frame = requestAnimationFrame(tick)
+    }
+
+    frame = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(frame)
+  }, [])
+
+  return progress
+}
+
+export function Loading({ label }) {
+  const progress = useLoadProgress()
+  const visual = Math.max(progress, 14)
+  const offset = LOADER_CIRCUMFERENCE * (1 - visual / 100)
+
+  return (
+    <div
+      className="loading"
+      role="progressbar"
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={progress}
+      aria-label={label}
+    >
+      <div className="loader">
+        <svg className="loader-spin" viewBox="0 0 72 72" aria-hidden="true">
+          <circle className="loader-track" cx="36" cy="36" r={LOADER_RADIUS} />
+          <circle
+            className="loader-arc"
+            cx="36"
+            cy="36"
+            r={LOADER_RADIUS}
+            transform="rotate(-90 36 36)"
+            style={{
+              strokeDasharray: `${LOADER_CIRCUMFERENCE} ${LOADER_CIRCUMFERENCE}`,
+              strokeDashoffset: offset,
+            }}
+          />
+        </svg>
+        <span className="loader-percent">{progress}%</span>
+      </div>
+      <p className="loader-label">{label}</p>
+    </div>
+  )
+}
+
 const INSTALL_KEY = 'gc_install_dismissed_at'
 const DISMISS_DAYS = 14
 
@@ -16,27 +80,30 @@ function wasDismissed() {
 }
 
 export function Topbar({ title, showBack, onBack }) {
+  const { meta } = useCatalogue()
   const boUrl = import.meta.env.VITE_BO_URL || 'http://127.0.0.1:8090/connexion'
   return (
-    <div className="topbar">
-      {showBack ? (
-        <button className="icon-btn" type="button" onClick={onBack} aria-label="Retour">‹</button>
-      ) : (
-        <span style={{ width: 6 }} />
-      )}
-      <h2>{title}</h2>
-      <a className="icon-btn" href={boUrl} title="Administration" aria-label="Administration">🔒</a>
-    </div>
-  )
-}
-
-export function WhatsappFab() {
-  const { meta } = useCatalogue()
-  if (!meta?.whatsapp_link) return null
-  return (
-    <a className="fab-whatsapp" href={meta.whatsapp_link} target="_blank" rel="noopener noreferrer">
-      💬 WhatsApp
-    </a>
+    <header className="topbar">
+      <div className="topbar-brand">
+        {showBack ? (
+          <button className="icon-btn" type="button" onClick={onBack} aria-label="Retour">←</button>
+        ) : (
+          <span className="mark" aria-hidden="true">L</span>
+        )}
+        <div>
+          <p className="brand-kicker">Gabon Catalogue</p>
+          <h2>{title}</h2>
+        </div>
+      </div>
+      <div className="topbar-actions">
+        {meta?.whatsapp_link ? (
+          <a className="wa-link" href={meta.whatsapp_link} target="_blank" rel="noopener noreferrer">
+            WhatsApp
+          </a>
+        ) : null}
+        <a className="wa-link" href={boUrl}>Connexion</a>
+      </div>
+    </header>
   )
 }
 
@@ -139,8 +206,7 @@ export function Screen({ title, showBack, onBack, children }) {
   return (
     <>
       <Topbar title={title} showBack={showBack} onBack={onBack} />
-      <div className="content">{children}</div>
-      <WhatsappFab />
+      <main className="content">{children}</main>
       <InstallBanner />
     </>
   )

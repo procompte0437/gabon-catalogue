@@ -9,16 +9,17 @@ export default function Splash() {
   const phone = meta?.whatsapp_display || '062-70-47-45'
 
   useEffect(() => {
-    const timer = window.setTimeout(() => navigate('/catalogue'), 3000)
+    const timer = window.setTimeout(() => navigate('/catalogue'), 3200)
     return () => window.clearTimeout(timer)
   }, [navigate])
 
   return (
-    <div className="splash" onClick={() => navigate('/catalogue')}>
-      <div className="splash-title display">{name}</div>
+    <button className="splash" type="button" onClick={() => navigate('/catalogue')}>
+      <p className="eyebrow">Maison de sélection</p>
       <div className="logo-circle"><span>lessy</span></div>
-      <div className="whatsapp-pill">💬 {phone}</div>
-      <div className="splash-tap">Touchez l’écran pour entrer</div>
-    </div>
+      <h1 className="splash-title">{name}</h1>
+      <p className="splash-phone">{phone}</p>
+      <span className="splash-tap">Entrer</span>
+    </button>
   )
 }
