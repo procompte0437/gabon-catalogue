@@ -89,7 +89,7 @@ export function Topbar({ title, showBack, onBack }) {
         <span className="topbar-spacer" />
       )}
       <h2>{title}</h2>
-      <a className="connexion-link" href={boUrl}>Connexion</a>
+      <a className="icon-btn" href={boUrl} title="Administrateur" aria-label="Administrateur">🔒</a>
     </header>
   )
 }
