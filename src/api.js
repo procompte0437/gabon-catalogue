@@ -40,6 +40,15 @@ export function getArticles(sousId) {
   return request(`/api/sous-rubriques/${sousId}/articles`)
 }
 
+// Renommer une rubrique : mot de passe général (0110 par défaut).
+export function updateRubrique(id, code, name) {
+  return request(`/api/rubriques/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ code, name }),
+  })
+}
+
 export function updateSousRubrique(id, code, name) {
   return request(`/api/sous-rubriques/${id}`, {
     method: 'PUT',

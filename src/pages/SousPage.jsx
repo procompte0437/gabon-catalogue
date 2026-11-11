@@ -140,7 +140,7 @@ function ArticleEditor({ article, isLinked, onClose, onSaved }) {
   return (
     <Modal
       title="Modifier l’article"
-      message="Entrez le mot de passe de cet article pour modifier sa photo et son titre."
+      message="Entrez le mot de passe de cet article (ou le mot de passe administrateur) pour modifier sa photo et son titre."
       onClose={onClose}
     >
       <form onSubmit={save}>

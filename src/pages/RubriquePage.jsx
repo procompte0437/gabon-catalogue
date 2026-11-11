@@ -80,7 +80,7 @@ export default function RubriquePage() {
       {editing ? (
         <Modal
           title="Modifier la sous-rubrique"
-          message="Entrez le mot de passe de cette sous-rubrique pour la renommer."
+          message="Entrez le mot de passe de cette sous-rubrique (ou le mot de passe administrateur) pour la renommer."
           onClose={() => setEditing(null)}
         >
           <form onSubmit={save}>

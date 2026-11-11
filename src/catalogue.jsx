@@ -21,8 +21,16 @@ export function CatalogueProvider({ children }) {
     }
   }, [])
 
+  // Remplace une rubrique après son renommage, sans recharger tout le catalogue.
+  function replaceRubrique(updated) {
+    setMeta((current) => current && {
+      ...current,
+      rubriques: current.rubriques.map((item) => (item.id === updated.id ? updated : item)),
+    })
+  }
+
   return (
-    <CatalogueContext.Provider value={{ meta, error }}>
+    <CatalogueContext.Provider value={{ meta, error, replaceRubrique }}>
       {children}
     </CatalogueContext.Provider>
   )
