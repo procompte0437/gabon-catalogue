@@ -67,12 +67,12 @@ export default function RubriquePage() {
       <div className="catalogue-grid">
         {items.map((item) => (
           <div className="card-row" key={item.id}>
-            <div className="idx">{String(item.position).padStart(2, '0')}</div>
+            <div className="idx">{item.position}</div>
             <button className="label" type="button" onClick={() => navigate(`/rubrique/${id}/sous/${item.id}`)}>
               {item.name}
             </button>
             <button className="edit-pencil" type="button" aria-label={`Modifier ${item.name}`} onClick={() => openPin(item)}>✎</button>
-            <button className="chev" type="button" aria-label="Ouvrir" onClick={() => navigate(`/rubrique/${id}/sous/${item.id}`)}>→</button>
+            <button className="chev" type="button" aria-label="Ouvrir" onClick={() => navigate(`/rubrique/${id}/sous/${item.id}`)}>›</button>
           </div>
         ))}
       </div>

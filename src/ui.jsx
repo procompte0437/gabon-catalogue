@@ -80,30 +80,27 @@ function wasDismissed() {
 }
 
 export function Topbar({ title, showBack, onBack }) {
-  const { meta } = useCatalogue()
   const boUrl = import.meta.env.VITE_BO_URL || 'http://127.0.0.1:8090/connexion'
   return (
     <header className="topbar">
-      <div className="topbar-brand">
-        {showBack ? (
-          <button className="icon-btn" type="button" onClick={onBack} aria-label="Retour">←</button>
-        ) : (
-          <span className="mark" aria-hidden="true">L</span>
-        )}
-        <div>
-          <p className="brand-kicker">Gabon Catalogue</p>
-          <h2>{title}</h2>
-        </div>
-      </div>
-      <div className="topbar-actions">
-        {meta?.whatsapp_link ? (
-          <a className="wa-link" href={meta.whatsapp_link} target="_blank" rel="noopener noreferrer">
-            WhatsApp
-          </a>
-        ) : null}
-        <a className="wa-link" href={boUrl}>Connexion</a>
-      </div>
+      {showBack ? (
+        <button className="icon-btn" type="button" onClick={onBack} aria-label="Retour">‹</button>
+      ) : (
+        <span className="topbar-spacer" />
+      )}
+      <h2>{title}</h2>
+      <a className="connexion-link" href={boUrl}>Connexion</a>
     </header>
+  )
+}
+
+export function WhatsappFab() {
+  const { meta } = useCatalogue()
+  if (!meta?.whatsapp_link) return null
+  return (
+    <a className="fab-whatsapp" href={meta.whatsapp_link} target="_blank" rel="noopener noreferrer">
+      💬 WhatsApp
+    </a>
   )
 }
 
@@ -207,6 +204,7 @@ export function Screen({ title, showBack, onBack, children }) {
     <>
       <Topbar title={title} showBack={showBack} onBack={onBack} />
       <main className="content">{children}</main>
+      <WhatsappFab />
       <InstallBanner />
     </>
   )
