@@ -1,0 +1,9 @@
+{
+  "name": "Gabon Catalogue",
+  "short_name": "Gabon Cat.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#D4A017",
+  "theme_color": "#1C1712",
+  "lang": "fr"
+}

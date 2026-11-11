@@ -1,0 +1,175 @@
+:root {
+  --mustard: #D4A017;
+  --mustard-deep: #B8860B;
+  --mustard-pale: #F1C94A;
+  --black: #1C1712;
+  --black-soft: #26201A;
+  --blue-dark: #12206B;
+  --red-dark: #7A0E0E;
+  --cream: #FFF6E0;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body, #root { min-height: 100%; }
+body {
+  margin: 0;
+  font-family: Inter, sans-serif;
+  background: var(--mustard);
+  color: var(--black);
+}
+#root { min-height: 100vh; display: flex; flex-direction: column; }
+h1, h2, h3, .display { font-family: "Baloo 2", sans-serif; }
+button, input { font-family: inherit; }
+button { cursor: pointer; border: none; background: none; color: inherit; }
+
+.splash {
+  min-height: 100vh;
+  background: var(--mustard);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px;
+  position: relative;
+}
+.splash-title { font-size: 26px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 28px; }
+.logo-circle {
+  width: 150px; height: 150px; border-radius: 50%; background: var(--blue-dark);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 10px 0 rgba(0, 0, 0, 0.15), 0 14px 24px rgba(0, 0, 0, 0.25);
+  margin-bottom: 26px; border: 5px solid var(--black);
+}
+.logo-circle span { font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: 30px; color: var(--red-dark); letter-spacing: 1px; }
+.whatsapp-pill {
+  margin-top: 14px; background: var(--black); color: var(--mustard-pale);
+  padding: 10px 20px; border-radius: 30px; font-weight: 600; font-size: 15px;
+}
+.splash-tap { position: absolute; bottom: 36px; font-size: 12px; color: var(--black-soft); opacity: 0.75; }
+
+.topbar {
+  position: sticky; top: 0; z-index: 20; background: var(--black); color: var(--mustard-pale);
+  padding: 14px 16px; display: flex; align-items: center; gap: 10px;
+}
+.topbar h2 { margin: 0; font-size: 18px; color: var(--mustard-pale); flex: 1; line-height: 1.2; }
+.icon-btn {
+  color: var(--mustard-pale); font-size: 20px; width: 34px; height: 34px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center; text-decoration: none; flex-shrink: 0;
+}
+.icon-btn:active { background: rgba(255, 255, 255, 0.12); }
+
+.content { flex: 1; padding: 14px 14px 90px; }
+.card-row {
+  display: flex; align-items: center; gap: 12px; background: var(--black); color: var(--mustard-pale);
+  padding: 15px 14px; border-radius: 14px; margin-bottom: 10px;
+}
+.card-row .idx {
+  width: 32px; height: 32px; border-radius: 9px; background: var(--mustard); color: var(--black);
+  font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.card-row .label {
+  flex: 1; font-size: 15px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left;
+}
+.card-row .chev { opacity: 0.5; font-size: 18px; padding: 0 4px; }
+.edit-pencil {
+  background: rgba(212, 160, 23, 0.18); color: var(--mustard-pale); width: 30px; height: 30px;
+  border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0;
+}
+.edit-pencil:active { background: rgba(212, 160, 23, 0.35); }
+
+.img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.img-card { background: var(--black); border-radius: 14px; overflow: hidden; }
+.img-thumb {
+  width: 100%; aspect-ratio: 1; background: linear-gradient(135deg, var(--mustard-deep), var(--black-soft));
+  display: flex; align-items: center; justify-content: center; color: var(--mustard-pale); font-size: 30px;
+  position: relative; padding: 0;
+}
+.img-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.link-badge {
+  position: absolute; top: 6px; right: 6px; width: 22px; height: 22px; border-radius: 50%;
+  background: rgba(28, 23, 18, 0.75); color: var(--mustard-pale); font-size: 12px;
+  display: flex; align-items: center; justify-content: center;
+}
+.img-caption { padding: 9px 10px 11px; display: flex; align-items: center; gap: 6px; }
+.img-caption .title { flex: 1; color: var(--mustard-pale); font-size: 12.5px; font-weight: 600; line-height: 1.3; word-break: break-word; text-align: left; }
+.img-caption .edit-pencil { width: 26px; height: 26px; font-size: 12px; }
+
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0, 0, 0, 0.55); z-index: 100;
+  display: flex; align-items: flex-end; justify-content: center;
+}
+.modal-sheet {
+  background: var(--cream); width: 100%; max-width: 480px; border-radius: 20px 20px 0 0;
+  padding: 22px 20px 28px; animation: slideUp 0.2s ease-out; max-height: 92vh; overflow: auto;
+}
+@keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: none; opacity: 1; } }
+.modal-sheet h3 { margin: 0 0 16px; font-size: 18px; }
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 12px; font-weight: 600; color: var(--black-soft); margin-bottom: 6px; }
+.field input {
+  width: 100%; padding: 11px 12px; border-radius: 10px; border: 1.5px solid var(--mustard-deep);
+  font-size: 15px; background: #fff; color: var(--black);
+}
+.field input:focus { outline: 2px solid var(--blue-dark); }
+.char-count { font-size: 11px; color: var(--black-soft); text-align: right; margin-top: 4px; }
+.modal-actions { display: flex; gap: 10px; margin-top: 18px; }
+.btn { flex: 1; padding: 13px; border-radius: 12px; font-weight: 700; font-size: 14px; text-align: center; }
+.btn-primary { background: var(--blue-dark); color: #fff; }
+.btn-primary:disabled { opacity: 0.7; }
+.btn-ghost { background: transparent; color: var(--black-soft); border: 1.5px solid var(--mustard-deep); }
+.file-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px;
+  border-radius: 10px; border: 1.5px dashed var(--mustard-deep); color: var(--black-soft); font-size: 13px; font-weight: 600;
+  background: rgba(212, 160, 23, 0.08);
+}
+.edit-preview { width: 90px; height: 90px; object-fit: cover; border-radius: 8px; margin-top: 8px; display: block; }
+.modal-msg { font-size: 13px; color: var(--black-soft); margin: -6px 0 14px; }
+.form-error { color: var(--red-dark); font-size: 12px; margin-bottom: 6px; }
+
+.fab-whatsapp {
+  position: fixed; bottom: 20px; right: 18px; background: #1f7a3d; color: #fff; border-radius: 30px;
+  padding: 13px 18px; font-weight: 700; font-size: 13px; display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3); z-index: 15; text-decoration: none;
+}
+.image-viewer-overlay {
+  position: fixed; inset: 0; background: #000; z-index: 150;
+  display: flex; align-items: center; justify-content: center; overflow: auto;
+}
+.image-viewer-overlay img { max-width: 100%; width: 100%; height: auto; display: block; }
+.image-viewer-close {
+  position: fixed; top: 16px; right: 16px; z-index: 160; background: rgba(0, 0, 0, 0.55); color: #fff;
+  width: 40px; height: 40px; border-radius: 50%; font-size: 18px;
+}
+.empty-state, .loading { color: var(--black-soft); text-align: center; padding: 60px 20px; font-size: 14px; }
+
+.install-banner {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 180;
+  background: var(--black); color: var(--mustard-pale);
+  padding: 14px 16px; display: flex; align-items: center; gap: 12px;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.3);
+}
+.install-icon {
+  width: 42px; height: 42px; border-radius: 12px; background: var(--mustard);
+  display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;
+}
+.install-text { flex: 1; font-size: 12.5px; line-height: 1.35; }
+.install-text b { display: block; font-size: 14px; margin-bottom: 2px; }
+.install-banner button { padding: 9px 14px; border-radius: 10px; font-weight: 700; font-size: 12.5px; flex-shrink: 0; }
+.btn-install-yes { background: var(--mustard); color: var(--black); }
+.btn-install-no { background: transparent; color: var(--mustard-pale); opacity: 0.75; }
+
+@media (min-width: 720px) {
+  #root { max-width: 480px; margin: 0 auto; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08); }
+  .fab-whatsapp, .install-banner, .modal-overlay, .image-viewer-overlay, .image-viewer-close {
+    max-width: 480px;
+    left: 50%;
+    transform: translateX(-50%);
+    right: auto;
+    width: 100%;
+  }
+  .fab-whatsapp { left: auto; right: calc(50% - 240px + 18px); transform: none; width: auto; }
+  .image-viewer-close { left: auto; right: calc(50% - 240px + 16px); transform: none; }
+}
