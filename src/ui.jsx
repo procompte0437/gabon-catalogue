@@ -94,7 +94,12 @@ export function Topbar({ title, showBack, onBack }) {
       {adminCode ? (
         <>
           <span className="admin-badge">ADMIN</span>
-          <button className="icon-btn" type="button" title="Quitter admin" aria-label="Quitter admin" onClick={() => setAdminCode(null)}>⏻</button>
+          <button className="icon-btn" type="button" title="Quitter admin" aria-label="Quitter admin" onClick={() => setAdminCode(null)}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true">
+              <path d="M12 3v9" />
+              <path d="M6.3 6.3a8 8 0 1 0 11.4 0" />
+            </svg>
+          </button>
         </>
       ) : (
         <button className="icon-btn" type="button" title="Administrateur" aria-label="Administrateur" onClick={() => setLogin(true)}>🔒</button>
