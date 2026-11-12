@@ -49,19 +49,49 @@ export function updateRubrique(id, code, name) {
   })
 }
 
-export function updateSousRubrique(id, code, name) {
+export function updateSousRubrique(id, code, name, newCode) {
   return request(`/api/sous-rubriques/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ code, name }),
+    body: JSON.stringify({ code, name, ...(newCode ? { new_code: newCode } : {}) }),
   })
 }
 
-export function updateArticle(id, { code, title, link, image }) {
+export function updateArticle(id, { code, title, link, image, newCode }) {
   const body = new FormData()
   body.append('code', code)
   body.append('title', title)
   if (link !== undefined) body.append('link', link ?? '')
   if (image) body.append('image', image)
+  if (newCode) body.append('new_code', newCode)
   return request(`/api/articles/${id}`, { method: 'POST', body })
+}
+
+// ---------- Mode administrateur (cadenas) : mot de passe général ----------
+function adminRequest(method, path, body) {
+  return request(path, {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  })
+}
+
+export function adminLogin(code) {
+  return adminRequest('POST', '/api/admin/login', { code })
+}
+
+function toCodeMap(data) {
+  return Object.fromEntries((data.codes || []).map((item) => [item.id, item.code]))
+}
+
+export async function getSousCodes(rubriqueId, code) {
+  return toCodeMap(await adminRequest('POST', `/api/admin/rubriques/${rubriqueId}/codes`, { code }))
+}
+
+export async function getArticleCodes(sousId, code) {
+  return toCodeMap(await adminRequest('POST', `/api/admin/sous-rubriques/${sousId}/codes`, { code }))
+}
+
+export function saveArticleCodes(sousId, code, codes) {
+  return adminRequest('PUT', `/api/admin/sous-rubriques/${sousId}/codes`, { code, codes })
 }

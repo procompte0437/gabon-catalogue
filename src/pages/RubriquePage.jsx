@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getSousRubriques, updateSousRubrique } from '../api'
+import { getSousCodes, getSousRubriques, updateSousRubrique } from '../api'
+import { useCatalogue } from '../catalogue'
 import { Loading, Modal, Screen } from '../ui'
 
 export default function RubriquePage() {
@@ -15,6 +16,18 @@ export default function RubriquePage() {
   const [name, setName] = useState('')
   const [formError, setFormError] = useState('')
   const [saving, setSaving] = useState(false)
+  const { adminCode } = useCatalogue()
+  const [codes, setCodes] = useState({})
+  const [newCode, setNewCode] = useState('')
+
+  // Mode administrateur : on charge les mots de passe des sous-rubriques.
+  useEffect(() => {
+    setCodes({})
+    if (!adminCode) return undefined
+    let active = true
+    getSousCodes(id, adminCode).then((map) => { if (active) setCodes(map) }).catch(() => {})
+    return () => { active = false }
+  }, [id, adminCode])
 
   useEffect(() => {
     let active = true
@@ -38,17 +51,24 @@ export default function RubriquePage() {
 
   function openPin(item) {
     setEditing(item)
-    setCode('')
+    setCode(adminCode || '')
+    setNewCode(codes[item.id] || '')
     setName(item.name)
     setFormError('')
   }
 
   async function save(event) {
     event.preventDefault()
+    const wanted = adminCode ? newCode.trim() : ''
+    if (wanted && !/^\d{4}$/.test(wanted)) {
+      setFormError('Le mot de passe doit contenir 4 chiffres.')
+      return
+    }
     setSaving(true)
     setFormError('')
     try {
-      const result = await updateSousRubrique(editing.id, code.trim(), name.trim())
+      const result = await updateSousRubrique(editing.id, (adminCode || code).trim(), name.trim(), wanted)
+      if (wanted) setCodes((current) => ({ ...current, [editing.id]: wanted }))
       setItems((current) => current.map((item) => (
         item.id === editing.id ? result.sous_rubrique : item
       )))
@@ -80,18 +100,26 @@ export default function RubriquePage() {
       {editing ? (
         <Modal
           title="Modifier la sous-rubrique"
-          message="Entrez le mot de passe de cette sous-rubrique (ou le mot de passe administrateur) pour la renommer."
+          message={adminCode ? '' : 'Entrez le mot de passe de cette sous-rubrique pour la renommer.'}
           onClose={() => setEditing(null)}
         >
           <form onSubmit={save}>
-            <div className="field">
-              <label htmlFor="sous-code">Mot de passe</label>
-              <input id="sous-code" value={code} inputMode="numeric" maxLength={4} placeholder="0000" onChange={(event) => setCode(event.target.value)} />
-            </div>
+            {adminCode ? null : (
+              <div className="field">
+                <label htmlFor="sous-code">Mot de passe</label>
+                <input id="sous-code" value={code} inputMode="numeric" maxLength={4} placeholder="0000" onChange={(event) => setCode(event.target.value)} />
+              </div>
+            )}
             <div className="field">
               <label htmlFor="sous-name">Nom</label>
               <input id="sous-name" value={name} maxLength={40} onChange={(event) => setName(event.target.value)} />
             </div>
+            {adminCode ? (
+              <div className="field">
+                <label htmlFor="sous-new-code">Mot de passe (4 chiffres)</label>
+                <input id="sous-new-code" value={newCode} inputMode="numeric" maxLength={4} placeholder="0000" onChange={(event) => setNewCode(event.target.value)} />
+              </div>
+            ) : null}
             {formError ? <div className="form-error">{formError}</div> : null}
             <div className="modal-actions">
               <button className="btn btn-ghost" type="button" onClick={() => setEditing(null)}>Annuler</button>

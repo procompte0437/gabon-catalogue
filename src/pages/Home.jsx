@@ -6,7 +6,7 @@ import { Loading, Modal, Screen } from '../ui'
 
 export default function Home() {
   const navigate = useNavigate()
-  const { meta, error, replaceRubrique } = useCatalogue()
+  const { meta, error, replaceRubrique, adminCode } = useCatalogue()
   const name = meta?.app_name || 'Gabon Catalogue'
   const [editing, setEditing] = useState(null)
 
@@ -29,6 +29,7 @@ export default function Home() {
       {editing ? (
         <RubriqueEditor
           rubrique={editing}
+          adminCode={adminCode}
           onClose={() => setEditing(null)}
           onSaved={(updated) => {
             replaceRubrique(updated)
@@ -40,8 +41,8 @@ export default function Home() {
   )
 }
 
-function RubriqueEditor({ rubrique, onClose, onSaved }) {
-  const [code, setCode] = useState('')
+function RubriqueEditor({ rubrique, adminCode, onClose, onSaved }) {
+  const [code, setCode] = useState(adminCode || '')
   const [name, setName] = useState(rubrique.name)
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
@@ -67,14 +68,16 @@ function RubriqueEditor({ rubrique, onClose, onSaved }) {
   return (
     <Modal
       title="Modifier la rubrique"
-      message="Entrez le mot de passe administrateur pour renommer cette rubrique."
+      message={adminCode ? '' : 'Entrez le mot de passe administrateur pour renommer cette rubrique.'}
       onClose={onClose}
     >
       <form onSubmit={save}>
-        <div className="field">
-          <label htmlFor="rubrique-code">Mot de passe</label>
-          <input id="rubrique-code" type="password" value={code} inputMode="numeric" maxLength={4} placeholder="••••" onChange={(event) => setCode(event.target.value)} />
-        </div>
+        {adminCode ? null : (
+          <div className="field">
+            <label htmlFor="rubrique-code">Mot de passe</label>
+            <input id="rubrique-code" type="password" value={code} inputMode="numeric" maxLength={4} placeholder="••••" onChange={(event) => setCode(event.target.value)} />
+          </div>
+        )}
         <div className="field">
           <label htmlFor="rubrique-name">Nom de la rubrique</label>
           <input id="rubrique-name" value={name} maxLength={40} onChange={(event) => setName(event.target.value)} />

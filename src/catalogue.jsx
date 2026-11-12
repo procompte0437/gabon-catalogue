@@ -6,6 +6,8 @@ const CatalogueContext = createContext(null)
 export function CatalogueProvider({ children }) {
   const [meta, setMeta] = useState(null)
   const [error, setError] = useState('')
+  // Mot de passe général saisi via le cadenas (null = pas en mode administrateur).
+  const [adminCode, setAdminCode] = useState(null)
 
   useEffect(() => {
     let active = true
@@ -30,7 +32,7 @@ export function CatalogueProvider({ children }) {
   }
 
   return (
-    <CatalogueContext.Provider value={{ meta, error, replaceRubrique }}>
+    <CatalogueContext.Provider value={{ meta, error, replaceRubrique, adminCode, setAdminCode }}>
       {children}
     </CatalogueContext.Provider>
   )

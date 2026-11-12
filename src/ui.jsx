@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { adminLogin } from './api'
 import { useCatalogue } from './catalogue'
 
 const LOADER_RADIUS = 28
@@ -80,7 +81,8 @@ function wasDismissed() {
 }
 
 export function Topbar({ title, showBack, onBack }) {
-  const boUrl = import.meta.env.VITE_BO_URL || 'http://127.0.0.1:8090/connexion'
+  const { adminCode, setAdminCode } = useCatalogue()
+  const [login, setLogin] = useState(false)
   return (
     <header className="topbar">
       {showBack ? (
@@ -89,8 +91,59 @@ export function Topbar({ title, showBack, onBack }) {
         <span className="topbar-spacer" />
       )}
       <h2>{title}</h2>
-      <a className="icon-btn" href={boUrl} title="Administrateur" aria-label="Administrateur">🔒</a>
+      {adminCode ? (
+        <>
+          <span className="admin-badge">ADMIN</span>
+          <button className="icon-btn" type="button" title="Quitter admin" aria-label="Quitter admin" onClick={() => setAdminCode(null)}>⏻</button>
+        </>
+      ) : (
+        <button className="icon-btn" type="button" title="Administrateur" aria-label="Administrateur" onClick={() => setLogin(true)}>🔒</button>
+      )}
+      {login ? <AdminLogin onClose={() => setLogin(false)} onDone={(code) => { setAdminCode(code); setLogin(false) }} /> : null}
     </header>
+  )
+}
+
+// Le cadenas : connexion avec le mot de passe général (0110 par défaut).
+function AdminLogin({ onClose, onDone }) {
+  const [code, setCode] = useState('')
+  const [error, setError] = useState('')
+  const [busy, setBusy] = useState(false)
+
+  async function submit(event) {
+    event.preventDefault()
+    const value = code.trim()
+    if (value.length !== 4) {
+      setError('Mot de passe incorrect.')
+      return
+    }
+    setBusy(true)
+    setError('')
+    try {
+      await adminLogin(value)
+      onDone(value)
+    } catch (reason) {
+      setError(reason.message)
+      setCode('')
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <Modal title="Connexion administrateur" onClose={onClose}>
+      <form onSubmit={submit}>
+        <div className="field">
+          <label htmlFor="admin-pass">Mot de passe</label>
+          <input id="admin-pass" type="password" autoFocus value={code} inputMode="numeric" maxLength={4} placeholder="••••" onChange={(event) => setCode(event.target.value)} />
+        </div>
+        {error ? <div className="form-error">{error}</div> : null}
+        <div className="modal-actions">
+          <button className="btn btn-ghost" type="button" onClick={onClose}>Annuler</button>
+          <button className="btn btn-primary" type="submit" disabled={busy}>{busy ? 'Connexion…' : 'Se connecter'}</button>
+        </div>
+      </form>
+    </Modal>
   )
 }
 
