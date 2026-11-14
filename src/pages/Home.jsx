@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { addRubrique, deleteRubrique, updateRubrique } from '../api'
 import { useCatalogue } from '../catalogue'
-import { Loading, Modal, Screen } from '../ui'
+import { Loading, Modal, PasswordInput, Screen } from '../ui'
 
 export default function Home() {
   const navigate = useNavigate()
@@ -126,7 +126,7 @@ function RubriqueEditor({ rubrique, adminCode, onClose, onSaved, onDeleted }) {
         {adminCode ? null : (
           <div className="field">
             <label htmlFor="rubrique-code">Mot de passe</label>
-            <input id="rubrique-code" type="password" value={code} inputMode="numeric" maxLength={4} placeholder="••••" onChange={(event) => setCode(event.target.value)} />
+            <PasswordInput id="rubrique-code" value={code} onChange={(event) => setCode(event.target.value)} />
           </div>
         )}
         <div className="field">

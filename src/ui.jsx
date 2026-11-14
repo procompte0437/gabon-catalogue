@@ -109,7 +109,40 @@ export function Topbar({ title, showBack, onBack }) {
   )
 }
 
-// Le cadenas : connexion avec le mot de passe général (0110 par défaut).
+// Champ « mot de passe » avec un œil pour afficher / masquer ce qu'on tape.
+export function PasswordInput({ id, value, onChange, autoFocus = false }) {
+  const [visible, setVisible] = useState(false)
+  return (
+    <div className="password-box">
+      <input
+        id={id}
+        type={visible ? 'text' : 'password'}
+        autoFocus={autoFocus}
+        value={value}
+        inputMode="numeric"
+        maxLength={4}
+        placeholder="••••"
+        autoComplete="off"
+        onChange={onChange}
+      />
+      <button
+        className="password-eye"
+        type="button"
+        aria-label={visible ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+        title={visible ? 'Masquer' : 'Afficher'}
+        onClick={() => setVisible((current) => !current)}
+      >
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" />
+          <circle cx="12" cy="12" r="3" />
+          {visible ? <path d="M4 4l16 16" /> : null}
+        </svg>
+      </button>
+    </div>
+  )
+}
+
+// Le cadenas : connexion avec le mot de passe général.
 function AdminLogin({ onClose, onDone }) {
   const [code, setCode] = useState('')
   const [error, setError] = useState('')
@@ -140,7 +173,7 @@ function AdminLogin({ onClose, onDone }) {
       <form onSubmit={submit}>
         <div className="field">
           <label htmlFor="admin-pass">Mot de passe</label>
-          <input id="admin-pass" type="password" autoFocus value={code} inputMode="numeric" maxLength={4} placeholder="••••" onChange={(event) => setCode(event.target.value)} />
+          <PasswordInput id="admin-pass" autoFocus value={code} onChange={(event) => setCode(event.target.value)} />
         </div>
         {error ? <div className="form-error">{error}</div> : null}
         <div className="modal-actions">

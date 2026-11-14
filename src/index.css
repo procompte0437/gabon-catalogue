@@ -398,3 +398,13 @@ a.icon-btn { text-decoration: none; font-size: 16px; }
   background: none; border: none; color: var(--red-dark);
   font: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
 }
+
+/* Mot de passe avec œil pour l'afficher */
+.password-box { position: relative; }
+.password-box input { padding-right: 48px; letter-spacing: 2px; }
+.password-eye {
+  position: absolute; top: 50%; right: 6px; transform: translateY(-50%);
+  width: 38px; height: 38px; display: grid; place-items: center;
+  background: none; border: none; border-radius: 8px; color: var(--black-soft); cursor: pointer;
+}
+.password-eye:hover { background: rgba(0, 0, 0, 0.06); }
