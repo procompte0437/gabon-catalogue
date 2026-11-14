@@ -389,3 +389,12 @@ a.icon-btn { text-decoration: none; font-size: 16px; }
 .bulk-input { flex: 1; }
 .bulk-input input { letter-spacing: 2px; }
 .bulk-reset { flex: 0 0 auto; padding: 11px 12px; }
+
+/* Suppression d'une rubrique (mode administrateur) */
+.btn-danger { background: var(--red-dark); color: #fff; border: 1.5px solid var(--red-dark); }
+.btn-danger:disabled { opacity: 0.6; }
+.btn-delete-link {
+  display: block; width: 100%; margin-top: 14px; padding: 8px;
+  background: none; border: none; color: var(--red-dark);
+  font: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
+}

@@ -31,8 +31,17 @@ export function CatalogueProvider({ children }) {
     })
   }
 
+  // Ajout / suppression (mode administrateur).
+  function appendRubrique(created) {
+    setMeta((current) => current && { ...current, rubriques: [...current.rubriques, created] })
+  }
+
+  function setRubriques(rubriques) {
+    setMeta((current) => current && { ...current, rubriques })
+  }
+
   return (
-    <CatalogueContext.Provider value={{ meta, error, replaceRubrique, adminCode, setAdminCode }}>
+    <CatalogueContext.Provider value={{ meta, error, replaceRubrique, appendRubrique, setRubriques, adminCode, setAdminCode }}>
       {children}
     </CatalogueContext.Provider>
   )

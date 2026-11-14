@@ -95,3 +95,12 @@ export async function getArticleCodes(sousId, code) {
 export function saveArticleCodes(sousId, code, codes) {
   return adminRequest('PUT', `/api/admin/sous-rubriques/${sousId}/codes`, { code, codes })
 }
+
+// Ajout / suppression de rubriques (mode administrateur).
+export function addRubrique(code, name, sousCount) {
+  return adminRequest('POST', '/api/admin/rubriques', { code, name, sous_count: sousCount })
+}
+
+export function deleteRubrique(id, code) {
+  return adminRequest('DELETE', `/api/admin/rubriques/${id}`, { code })
+}
